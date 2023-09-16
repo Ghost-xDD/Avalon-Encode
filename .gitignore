@@ -26,10 +26,15 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
+create2.js
+CreateForm2.jsx
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
