@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { magic } from '@/lib/magic';
+import { useMagicContext } from '@/context/MagicProvider';
 
 const ShowUIButton = () => {
   const [showButton, setShowButton] = useState(false);
+  // const { magic } = useMagicContext();
 
   const checkWalletType = async () => {
     try {
@@ -25,12 +27,10 @@ const ShowUIButton = () => {
   //   // Call the checkWalletType function immediately
   //   checkWalletType();
 
-  //   // Set an interval to periodically check the login status
   //   const intervalId = setInterval(() => {
   //     checkWalletType();
-  //   }, 1000); // Check every 5 seconds
+  //   }, 1000);
 
-  //   // Cleanup the interval on component unmount
   //   return () => {
   //     clearInterval(intervalId);
   //   };

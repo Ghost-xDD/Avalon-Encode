@@ -9,19 +9,19 @@ const ImageCard = ({ index, imageUrl }) => {
   let height;
   switch (index % 4) {
     case 0:
-      height = 'h-[310px]'; // base height
+      height = 'h-[310px]';
       break;
     case 1:
-      height = 'h-[350px]'; // base height * 2 + gutter
+      height = 'h-[350px]';
       break;
     case 2:
-      height = 'h-[400px]'; // base height * 3 + 2 * gutter
+      height = 'h-[400px]';
       break;
     case 3:
-      height = 'h-[390px]'; // base height * 4 + 3 * gutter
+      height = 'h-[390px]';
       break;
     default:
-      height = 'h-[600px]'; // base height
+      height = 'h-[600px]';
   }
 
   return (

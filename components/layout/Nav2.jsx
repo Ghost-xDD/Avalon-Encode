@@ -1,19 +1,25 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { SiBlockchaindotcom } from 'react-icons/si';
 import Link from 'next/link';
+import { useWalletLogin } from '@lens-protocol/react-web';
 import ChooseCreate from '../modal/ChooseCreate';
 import { useStickyNavbar } from '@/context/StickyNavbarContext';
 import ConnectButton from '../button/ConnectButton';
 import { useMagicContext } from '@/context/MagicProvider';
 import DisconnectButton from '../button/DisconnectButton';
-import Login from '../wallet-methods/Login';
 import ShowUIButton from '../ShowUIButton';
 import dynamic from 'next/dynamic';
 
-const Nav2 = ({ sticky, setAccount }) => {
+const Nav2 = ({ sticky }) => {
   const [openModal, setOpenModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [account, setAccount] = useState(null);
   const { magic } = useMagicContext();
+  const {
+    execute: login,
+    error: loginError,
+    isPending: isLoginPending,
+  } = useWalletLogin();
 
   const connect = useCallback(async () => {
     if (!magic) {
@@ -25,18 +31,36 @@ const Nav2 = ({ sticky, setAccount }) => {
       setDisabled(true);
       const accounts = await magic.wallet.connectWithUI();
       setDisabled(false);
-      console.log('Logged in user:', accounts[0]);
+      console.log('Connected wallet:', accounts[0]);
       localStorage.setItem('user', accounts[0]);
       setAccount(accounts[0]);
+      console.log('User logged in with address:', accounts[0]);
     } catch (error) {
       setDisabled(false);
       console.error(error);
     }
   }, [magic, setAccount]);
 
+  const loginUser = useCallback(
+    async (address) => {
+      try {
+        await login({ address });
+        console.log('User logged in with address:', address);
+      } catch (error) {
+        console.error('Login error:', error);
+      }
+    },
+    [login]
+  );
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    setAccount(user);
+  }, []);
 
   return (
     <nav
@@ -92,57 +116,17 @@ const Nav2 = ({ sticky, setAccount }) => {
               </div>
             </div>
             <div className="absolute right-12">
-              <ConnectButton onClick={connect} disabled={disabled} />
+              {account ? (
+                <DisconnectButton />
+              ) : (
+                <ConnectButton onClick={connect} disabled={disabled} />
+              )}
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             <Link href="/profile">
               <span className="text-end ml-[80px] p-2 px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full" />
             </Link>
           </div>
-
-          {/* <div className="absolute inset-y-0 right-0 flex items-center transition-all sm:hidden">
-            <button
-              className="min-[412px]:text-white min-[412px]:bg-[#101010]/[.3]  min-[412px]:backdrop-blur-lg text-white rounded-sm w-6 h-6 inline-flex items-center justify-center rounded-mdx hover:bg-none focus:outline-none focus:ring-none focus:ring-none transition-all"
-              id="headlessui-disclosure-button-:R15id6:"
-              type="button"
-              aria-expanded="false"
-              data-headlessui-state=""
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect
-                  x="2"
-                  y="4"
-                  width="20"
-                  height="2"
-                  rx="1"
-                  fill="currentColor"
-                ></rect>
-                <rect
-                  x="2"
-                  y="11"
-                  width="20"
-                  height="2"
-                  rx="1"
-                  fill="currentColor"
-                ></rect>
-                <rect
-                  x="2"
-                  y="18"
-                  width="20"
-                  height="2"
-                  rx="1"
-                  fill="currentColor"
-                ></rect>
-              </svg>
-            </button>
-          </div> */}
         </div>
       </section>
       <ChooseCreate

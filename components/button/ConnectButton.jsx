@@ -1,5 +1,6 @@
 import React from 'react';
 import Loading from 'public/loading.svg';
+import { PulseLoader } from 'react-spinners';
 import Image from 'next/image';
 
 const ConnectButton = ({ onClick, disabled }) => {
@@ -11,8 +12,8 @@ const ConnectButton = ({ onClick, disabled }) => {
       disabled={disabled}
     >
       {disabled ? (
-        <div className="loading-container min-w-full">
-          <Image className="loading" alt="loading" src={Loading} />
+        <div className="loading-container min-w-full mt-2">
+          <PulseLoader color="#fff" />
         </div>
       ) : (
         'Connect'

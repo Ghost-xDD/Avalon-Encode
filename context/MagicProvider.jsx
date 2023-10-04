@@ -2,16 +2,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Magic } from 'magic-sdk';
 import { ethers } from 'ethers';
 
-// Context and default values
+
 export const MagicContext = createContext({
   magic: null,
   ethersProvider: null,
 });
 
-// Custom hook for using the context
 export const useMagicContext = () => useContext(MagicContext);
 
-// Provider component
 const MagicProvider = ({ children }) => {
   const [magicInstance, setMagicInstance] = useState(null);
   const [ethersProvider, setEthersProvider] = useState(null);

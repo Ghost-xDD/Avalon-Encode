@@ -2,6 +2,7 @@ import React from 'react';
 import Nav2 from '@/components/layout/Nav2';
 import Explore from '@/components/Explore';
 import { useStickyNavbar } from '@/context/StickyNavbarContext';
+import ShowUIButton from '@/components/ShowUIButton';
 
 const explore = () => {
   const { sticky } = useStickyNavbar();
@@ -13,6 +14,7 @@ const explore = () => {
       </div>
 
       <Explore />
+      <ShowUIButton />
     </div>
   );
 };
