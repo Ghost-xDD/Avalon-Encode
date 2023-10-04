@@ -18,7 +18,7 @@
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "ethers": "^5.7.2",
-    "magic-sdk": "^16.2.0",
+    "magic-sdk": "^20.1.1",
     "next": "13.4.19",
     "nft.storage": "^7.1.1",
     "postcss": "8.4.29",

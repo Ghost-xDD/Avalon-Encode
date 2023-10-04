@@ -32,8 +32,8 @@ const MagicProvider = ({ children }) => {
     }
   }, []);
 
-  console.log(magicInstance);
-  console.log(ethersProvider);
+  // console.log(magicInstance);
+  // console.log(ethersProvider);
 
   return (
     <MagicContext.Provider

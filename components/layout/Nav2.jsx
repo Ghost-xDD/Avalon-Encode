@@ -7,6 +7,8 @@ import { useStickyNavbar } from '@/context/StickyNavbarContext';
 import ConnectButton from '../button/ConnectButton';
 import { useMagicContext } from '@/context/MagicProvider';
 import DisconnectButton from '../button/DisconnectButton';
+import SignInLensModal from '../modal/SignInLensModal';
+import { ethers } from 'ethers';
 import ShowUIButton from '../ShowUIButton';
 import dynamic from 'next/dynamic';
 
@@ -14,6 +16,7 @@ const Nav2 = ({ sticky }) => {
   const [openModal, setOpenModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [account, setAccount] = useState(null);
+  const [showLensModal, setShowLensModal] = useState(false);
   const { magic } = useMagicContext();
   const {
     execute: login,
@@ -41,11 +44,15 @@ const Nav2 = ({ sticky }) => {
     }
   }, [magic, setAccount]);
 
-  const loginUser = useCallback(
-    async (address) => {
+  const loginLens = useCallback(
+    async (account) => {
       try {
-        await login({ address });
-        console.log('User logged in with address:', address);
+        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+        const signer = provider.getSigner();
+        console.log(signer);
+
+        await login(signer, account);
+        console.log('User logged in with account:', account);
       } catch (error) {
         console.error('Login error:', error);
       }
@@ -61,6 +68,14 @@ const Nav2 = ({ sticky }) => {
     const user = localStorage.getItem('user');
     setAccount(user);
   }, []);
+
+  useEffect(() => {
+    if (account) {
+      setShowLensModal(true);
+    }
+  }, [account]);
+
+  // console.log(account);
 
   return (
     <nav
@@ -115,6 +130,7 @@ const Nav2 = ({ sticky }) => {
                 </button>
               </div>
             </div>
+            {/* <ShowUIButton /> */}
             <div className="absolute right-12">
               {account ? (
                 <DisconnectButton />
@@ -132,6 +148,11 @@ const Nav2 = ({ sticky }) => {
       <ChooseCreate
         openMintModal={openModal}
         handleOnClose={() => setOpenModal(false)}
+      />
+      <SignInLensModal
+        openLensModal={showLensModal}
+        handleOnClose={() => setShowLensModal(false)}
+        lensLogin={loginLens}
       />
     </nav>
   );
