@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { magic } from '@/lib/magic';
 
@@ -19,20 +21,20 @@ const ShowUIButton = () => {
     }
   };
 
-  useEffect(() => {
-    // Call the checkWalletType function immediately
-    checkWalletType();
+  // useEffect(() => {
+  //   // Call the checkWalletType function immediately
+  //   checkWalletType();
 
-    // Set an interval to periodically check the login status
-    const intervalId = setInterval(() => {
-      checkWalletType();
-    }, 1000); // Check every 5 seconds
+  //   // Set an interval to periodically check the login status
+  //   const intervalId = setInterval(() => {
+  //     checkWalletType();
+  //   }, 1000); // Check every 5 seconds
 
-    // Cleanup the interval on component unmount
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  //   // Cleanup the interval on component unmount
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, []);
 
   const handleShowUI = async () => {
     try {

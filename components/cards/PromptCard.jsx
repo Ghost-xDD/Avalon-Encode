@@ -6,9 +6,7 @@ import { ethers } from 'ethers';
 import AvalonV3 from '@/abi/AvalonV3.json';
 // import AvalonPromptMarketplace from "@/abi/AvalonPromptMarketplace.json";
 import { config } from '@/abi';
-import { useAccount, useBalance } from 'wagmi';
 import axios from 'axios';
-import { useEnsName, useEnsAvatar } from 'wagmi';
 
 const avalancheAddress = config.avalonV3;
 
@@ -28,7 +26,6 @@ const PromptCard = ({
   chainAddress,
 }) => {
   const [ethPrice, setEthPrice] = useState();
-  const { address, isConnected } = useAccount();
   const [sellerAddress, setSellerAddress] = useState('');
 
   const chainName = 'goerli';
@@ -43,10 +40,8 @@ const PromptCard = ({
         },
       });
 
-      // Parse the response to retrieve the ERC1155 tokens
       const tokens = response.data.nft.owners[0].address;
 
-      // console.log(tokens);
       setSellerAddress(tokens);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -75,20 +70,6 @@ const PromptCard = ({
     getTokenPrice();
     fetchData();
   }, []);
-
-  const ensNameData = useEnsName({
-    address: sellerAddress,
-    chainId: 5,
-  });
-
-  const ensName = ensNameData.data;
-
-  const ensAvatarData = useEnsAvatar({
-    address: sellerAddress,
-    chainId: 5,
-  });
-
-  const ensAvatar = ensAvatarData.data;
 
   return (
     <div className="border-gradient relative mb-10 flex justify-center items-center rounded-lg">
@@ -120,7 +101,7 @@ const PromptCard = ({
             </h3>
             <div className="flex items-center  mt-1 justify-center w-full text-gray-300">
               <div className="flex items-center  w-full mx-[20px]">
-                <img
+                {/* <img
                   src={
                     ensAvatar
                       ? ensAvatar
@@ -128,9 +109,9 @@ const PromptCard = ({
                   }
                   alt=""
                   className="w-[30px] rounded-[30px] ml-[12px]"
-                />
+                /> */}
                 &nbsp;
-                <div className="flex flex-col ">{ensName && ensName}</div>
+                <div className="flex flex-col ">ghostxd.eth</div>
               </div>
             </div>
 

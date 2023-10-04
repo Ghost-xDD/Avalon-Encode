@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { magic } from '@/lib/magic';
-import { useMagic } from '@/context/MagicContext';
+import React from 'react';
+import Loading from 'public/loading.svg';
+import Image from 'next/image';
 
-const ConnectButton = () => {
-  const { initializeProvider } = useMagic();
-
-  const handleConnect = async () => {
-    try {
-      await magic.wallet.connectWithUI();
-
-      initializeProvider();
-    } catch (error) {
-      console.error('handleConnect:', error);
-    }
-  };
-
+const ConnectButton = ({ onClick, disabled }) => {
   return (
     <button
       type="button"
       className="flex mr-[calc(24px+16px)] sm:mr-0 justify-center space-x-2 items-center bg-black text-white border-primer rounded-lg px-[1.5rem] text-base font-bold h-10 sm:h-12 min-w-[105px] sm:min-w-[140px] transition-all cursor-pointer"
-      onClick={handleConnect}
+      onClick={onClick}
+      disabled={disabled}
     >
-      Connect Wallet
+      {disabled ? (
+        <div className="loading-container min-w-full">
+          <Image className="loading" alt="loading" src={Loading} />
+        </div>
+      ) : (
+        'Connect'
+      )}
     </button>
   );
 };

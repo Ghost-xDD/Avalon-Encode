@@ -4,7 +4,13 @@ import { config } from '@/abi';
 import axios from 'axios';
 import ImageCard from './ImageCard';
 import ExploreHeader from './ExploreHeader';
-import ShowUIButton from './ShowUIButton';
+// import ShowUIButton from './ShowUIButton';
+import dynamic from 'next/dynamic';
+
+const ShowUIButton = dynamic(
+  () => import('./ShowUIButton'),
+  { ssr: false } // This will load the component only on the client side
+);
 
 const Explore = () => {
   const [listedNFTs, setListedNFTs] = useState([]);
@@ -38,9 +44,9 @@ const Explore = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const items = listedNFTs.map((nft, index) => (
     <ImageCard key={index} index={index} imageUrl={nft.image_url} />

@@ -1,33 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { SiBlockchaindotcom } from 'react-icons/si';
 import Link from 'next/link';
 import ChooseCreate from '../modal/ChooseCreate';
-// import { ConnectButton } from '@rainbow-me/rainbowkit';
-// import { useEnsName, useEnsAvatar } from 'wagmi';
-import { useAccount } from 'wagmi';
-import { useUser } from '@/context/UserContext';
 import { useStickyNavbar } from '@/context/StickyNavbarContext';
 import ConnectButton from '../button/ConnectButton';
+import { useMagicContext } from '@/context/MagicProvider';
 import DisconnectButton from '../button/DisconnectButton';
+import Login from '../wallet-methods/Login';
 import ShowUIButton from '../ShowUIButton';
+import dynamic from 'next/dynamic';
 
-const Nav2 = ({ sticky }) => {
+const Nav2 = ({ sticky, setAccount }) => {
   const [openModal, setOpenModal] = useState(false);
-  const { user } = useUser();
+  const [disabled, setDisabled] = useState(false);
+  const { magic } = useMagicContext();
 
-  // const { address } = useAccount();
-  // console.log(address);
-  // const ensName = useEnsName({
-  //   address: address,
-  //   chainId: 5,
-  //   staleTime: 'infinity',
-  // });
+  const connect = useCallback(async () => {
+    if (!magic) {
+      console.log('Magic does not exist.');
+      return;
+    }
 
-  // const ensAvatar = useEnsAvatar({
-  //   address: address,
-  //   chainId: 5,
-  //   staleTime: 'infinity',
-  // });
+    try {
+      setDisabled(true);
+      const accounts = await magic.wallet.connectWithUI();
+      setDisabled(false);
+      console.log('Logged in user:', accounts[0]);
+      localStorage.setItem('user', accounts[0]);
+      setAccount(accounts[0]);
+    } catch (error) {
+      setDisabled(false);
+      console.error(error);
+    }
+  }, [magic, setAccount]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -87,14 +92,7 @@ const Nav2 = ({ sticky }) => {
               </div>
             </div>
             <div className="absolute right-12">
-              {!user ? (
-                <ConnectButton />
-              ) : (
-                <>
-                  <DisconnectButton />
-                  {/* <ShowUIButton /> */}
-                </>
-              )}
+              <ConnectButton onClick={connect} disabled={disabled} />
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             <Link href="/profile">
