@@ -4,6 +4,7 @@ import Nav2 from '@/components/layout/Nav2';
 import CreateImageForm from '@/components/CreateImageForm';
 import { useContext } from 'react';
 import { FormContext } from '@/context/formContext';
+import CreateForm from '@/components/CreateForm';
 
 const Create = () => {
   const { generationComplete } = useContext(FormContext);
@@ -12,7 +13,7 @@ const Create = () => {
       <div className="bg-[url('/bg-stars.png')] bg-repeat-x bg-center relative">
         <Nav2 />
       </div>
-      <CreateImageForm />
+      <CreateForm />
     </div>
   );
 };

@@ -86,7 +86,7 @@ const PromptCard = ({
           <div className="w-full">
             <div>
               <img
-                src="https://altcoinsbox.com/wp-content/uploads/2023/03/matic-logo.webp"
+                src="https://www.cdnlogo.com/logos/e/81/ethereum-eth.svg"
                 alt=""
                 className="w-[34px] h-[35px] p-1 absolute top-4 right-3 bg-white rounded-2xl"
               />

@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useContext, useState, useEffect } from 'react';
+import { Switch } from '@headlessui/react';
 import { NFTStorage, File } from 'nft.storage';
 import { FormContext } from '@/context/formContext';
 // import { useAccount, useNetwork } from 'wagmi';
@@ -11,12 +12,17 @@ import AvalonV3 from '@/abi/AvalonV3.json';
 import { config } from '@/abi';
 import SuccessModal from './modal/SuccessModal';
 
+const address = '0x64';
+const chain = 'goerli';
+
 const CreateForm = () => {
-  const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  // const { address } = useAccount();
+
+  // const { chain } = useNetwork();
   const { base64Image } = useContext(FormContext);
   const [openModal, setOpenModal] = useState(true);
   const [promptNftName, setPromptNftName] = useState('');
+  const [enabled, setEnabled] = useState(false);
   const [promptNftDescription, setPromptNftDescription] = useState('');
   const [attr, setAttr] = useState(
     JSON.stringify([
@@ -202,43 +208,79 @@ const CreateForm = () => {
 
           <div class="text-gray-400 flex items-center">
             <label for="quantity" class="block mb-2">
-              Maximum Supply:
+              Open Source:
             </label>
             &nbsp;&nbsp;
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              min="1"
-              max="50000"
-              class="px-4 bg-transparent py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              onChange={(e) => setMaxSupply(e.target.value)}
-            />
+            <Switch
+              checked={enabled}
+              onChange={setEnabled}
+              className={`${enabled ? 'bg-purple-800' : 'bg-gray-300'}
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+            >
+              <span className="sr-only">Use setting</span>
+              <span
+                aria-hidden="true"
+                className={`${enabled ? 'translate-x-9' : 'translate-x-0'}
+            pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+              />
+            </Switch>
           </div>
 
-          <div class="text-gray-400 mt-6 flex items-center">
-            <label for="quantity" class="block mb-2 mr-12">
-              NFT Price:
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              min="1"
-              max="50000"
-              class="px-4 bg-transparent py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              onChange={(e) => setNftPrice(e.target.value)}
-            />
-          </div>
+          {!enabled && (
+            <div class="text-gray-400 flex items-center mt-8">
+              <label for="quantity" class="block mb-2">
+                Maximum Supply:
+              </label>
+              &nbsp;&nbsp;
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+                max="50000"
+                class="px-4 bg-transparent py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                onChange={(e) => setMaxSupply(e.target.value)}
+              />
+            </div>
+          )}
 
-          <button
-            type="submit"
-            className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-            onClick={CreateNFT}
-          >
-            Create
-          </button>
+          {!enabled && (
+            <div class="text-gray-400 mt-6 flex items-center">
+              <label for="quantity" class="block mb-2 mr-12">
+                NFT Price:
+              </label>
+              &nbsp;&nbsp;
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+                max="50000"
+                class="px-4 bg-transparent py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                onChange={(e) => setNftPrice(e.target.value)}
+              />
+            </div>
+          )}
+
+          {!enabled && (
+            <button
+              type="submit"
+              className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+              onClick={CreateNFT}
+            >
+              Create
+            </button>
+          )}
+
+          {enabled && (
+            <button
+              type="submit"
+              className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+              onClick={CreateNFT}
+            >
+              Create N
+            </button>
+          )}
         </form>
 
         <div className="mr-[100px] mt-10">

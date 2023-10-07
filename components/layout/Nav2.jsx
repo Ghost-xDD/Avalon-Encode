@@ -18,11 +18,6 @@ const Nav2 = ({ sticky }) => {
   const [account, setAccount] = useState(null);
   const [showLensModal, setShowLensModal] = useState(false);
   const { magic } = useMagicContext();
-  const {
-    execute: login,
-    error: loginError,
-    isPending: isLoginPending,
-  } = useWalletLogin();
 
   const connect = useCallback(async () => {
     if (!magic) {
@@ -44,22 +39,6 @@ const Nav2 = ({ sticky }) => {
     }
   }, [magic, setAccount]);
 
-  const loginLens = useCallback(
-    async (account) => {
-      try {
-        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-        const signer = provider.getSigner();
-        console.log(signer);
-
-        await login(signer, account);
-        console.log('User logged in with account:', account);
-      } catch (error) {
-        console.error('Login error:', error);
-      }
-    },
-    [login]
-  );
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -68,14 +47,6 @@ const Nav2 = ({ sticky }) => {
     const user = localStorage.getItem('user');
     setAccount(user);
   }, []);
-
-  useEffect(() => {
-    if (account) {
-      setShowLensModal(true);
-    }
-  }, [account]);
-
-  // console.log(account);
 
   return (
     <nav
@@ -152,7 +123,6 @@ const Nav2 = ({ sticky }) => {
       <SignInLensModal
         openLensModal={showLensModal}
         handleOnClose={() => setShowLensModal(false)}
-        lensLogin={loginLens}
       />
     </nav>
   );
