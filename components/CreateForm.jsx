@@ -30,6 +30,7 @@ const CreateForm = () => {
       { trait_type: 'creator', value: '' },
       { trait_type: 'chain', value: '' },
       { trait_type: 'prompts', value: '' },
+      { trait_type: 'opensource', value: '' },
     ])
   );
   const [extUrl, setExtUrl] = useState('https://www.avalon.ai');
@@ -45,8 +46,94 @@ const CreateForm = () => {
 
   const apiKeys = process.env.NEXT_PUBLIC_NFTSTORAGE_TOKEN;
 
+  const CreatePost = async (e) => {
+    e.preventDefault();
+    const openMaxSupply = 100;
+    const openPrice = 0;
+    const openValue = 'true';
+
+    let base64String = base64Image;
+
+    let imageType = 'image/jpeg';
+
+    let blob = base64ToBlob(base64String, imageType);
+
+    let parsedAttr = JSON.parse(attr);
+    parsedAttr[4].value = openValue;
+
+    parsedAttr[3].value = prompt;
+
+    parsedAttr[2].value = chain.name;
+    setAttr(JSON.stringify(parsedAttr));
+
+    parsedAttr[1].value = address;
+    setAttr(JSON.stringify(parsedAttr));
+
+    const mintNotification = toast.loading(
+      'Please wait! Tokenizing your Prompt NFT'
+    );
+
+    try {
+      const client = new NFTStorage({ token: apiKeys });
+      const imageFile = new File([blob], 'image.jpg', {
+        type: imageType,
+      });
+
+      const metadata = await client.store({
+        name: promptNftName,
+        description: promptNftDescription,
+        image: imageFile,
+        attributes: parsedAttr,
+      });
+
+      // console.log(metadata.url);
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const tokenUri = 'ipfs://' + metadata + '/metadata.json';
+
+      const royaltyFee = 10;
+
+      // Convert royalty fee to wei
+      const royaltyFeeWei = ethers.utils.parseUnits(royaltyFee.toString(), 2);
+
+      const nftPromptFactory = new ethers.Contract(
+        config.avalonV3,
+        AvalonV3,
+        signer
+      );
+
+      const createPromptNft = await nftPromptFactory.createNFT(
+        openMaxSupply,
+        metadata.url,
+        ethers.utils.parseEther(openPrice)
+      );
+
+      const receipt = await createPromptNft.wait();
+      console.log('createPromptNft: ', await createPromptNft.hash);
+      console.log('receipt: ', receipt);
+
+      // Show success message to the user
+      toast.update(mintNotification, {
+        render: 'Creation Completed Successfully',
+        type: 'success',
+        isLoading: false,
+        autoClose: 7000,
+      });
+
+      setTxHash(createPromptNft.hash);
+      setOpenModal(true);
+      setPromptNftName('');
+      setPromptNftDescription('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const CreateNFT = async (e) => {
     e.preventDefault();
+    const openValue = 'false';
 
     let base64String = base64Image;
 
@@ -56,6 +143,9 @@ const CreateForm = () => {
     let blob = base64ToBlob(base64String, imageType);
 
     let parsedAttr = JSON.parse(attr);
+
+    parsedAttr[4].value = openValue;
+
     parsedAttr[3].value = prompt;
 
     parsedAttr[2].value = chain.name;
@@ -276,7 +366,7 @@ const CreateForm = () => {
             <button
               type="submit"
               className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-              onClick={CreateNFT}
+              onClick={CreatePost}
             >
               Create N
             </button>

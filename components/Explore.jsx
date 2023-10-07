@@ -37,7 +37,7 @@ const Explore = () => {
           )
       );
 
-      // console.log(filteredTokens);
+      // console.log(tokens);
       setListedNFTs(filteredTokens);
     } catch (error) {
       console.error('Error fetching data:', error);

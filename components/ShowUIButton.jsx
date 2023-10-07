@@ -24,17 +24,17 @@ const ShowUIButton = () => {
     }
   };
 
-  useEffect(() => {
-    checkWalletType();
+  // useEffect(() => {
+  //   checkWalletType();
 
-    const intervalId = setInterval(() => {
-      checkWalletType();
-    }, 1000);
+  //   const intervalId = setInterval(() => {
+  //     checkWalletType();
+  //   }, 1000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, []);
 
   const handleShowUI = async () => {
     try {
