@@ -60,11 +60,11 @@ const Marketplace = () => {
           &nbsp;
           <p className="font-bold flex items-center py-2 px-3 rounded-xl bg-white/[0.12]">
             <img
-              src="https://www.cdnlogo.com/logos/e/81/ethereum-eth.svg"
+              src="https://altcoinsbox.com/wp-content/uploads/2023/03/matic-logo.webp"
               alt=""
               className="w-[34px] h-[35px] p-1  rounded-2xl"
             />
-            Ethereum
+            Polygon
           </p>
         </div>
       </div>

@@ -14,9 +14,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PromptDetails from './PromptDetails';
 import SuccessModal from './modal/SuccessModal';
-import { useEnsName, useEnsAvatar } from 'wagmi';
 
 const nftAddress = config.avalonV3;
+const ensAvatar =
+  'https://images.unsplash.com/photo-1656381620321-bddff61435c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bmZ0JTIwYXJ0fGVufDB8fDB8fHww&w=1000&q=80';
+
+const ensName = 'think';
 
 const NftPageDetails = ({
   image,
@@ -149,19 +152,19 @@ const NftPageDetails = ({
 
   // console.log(attributes);
 
-  const ensNameData = useEnsName({
-    address: owner,
-    chainId: 5,
-  });
+  // const ensNameData = useEnsName({
+  //   address: owner,
+  //   chainId: 5,
+  // });
 
-  const ensName = ensNameData.data;
+  // const ensName = ensNameData.data;
 
-  const ensAvatarData = useEnsAvatar({
-    address: owner,
-    chainId: 5,
-  });
+  // const ensAvatarData = useEnsAvatar({
+  //   address: owner,
+  //   chainId: 5,
+  // });
 
-  const ensAvatar = ensAvatarData.data;
+  // const ensAvatar = ensAvatarData.data;
 
   return (
     <>
